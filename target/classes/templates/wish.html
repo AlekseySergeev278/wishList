@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Мое желание</title>
+</head>
+<body>
+<p  th:text="${wish.getWishName()}"/>
+
+<form th:action="@{/update}" th:method="PATCH" th:object="${wish}">
+    <input type="hidden" th:field="*{id}">
+    <input type="hidden" th:field="*{userId}">
+    <label for="wishName">Введите название желания</label>
+    <input type="text" th:field="*{wishName}" id="wishName"><br>
+    <label for="price">Введите стоимость</label>
+    <input type="text" th:field="*{price}" id="price"><br>
+    <label for="shared">Желание видно друзьям</label>
+    <input type="text" th:field="*{shared}" id="shared"><br>
+    <button type="submit">Обновить</button>
+</form><br>
+
+<form th:action="@{/delete}" th:method="DELETE" th:object="${wish}">
+    <input type="hidden" th:field="*{id}">
+    <button type="submit">Удалить</button>
+</form>
+
+
+</body>
+</html>

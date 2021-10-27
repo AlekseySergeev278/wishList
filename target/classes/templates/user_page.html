@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Домашняя страница пользователя</title>
+</head>
+<body>
+
+<h1>Welcome</h1>
+<p th:text="Welcome + ' ' + ${user.name}"/>
+
+<div th:each="wish: ${wishes}">
+    <a th:href="@{/{id}/{wishName}(id=${user.getId()}, wishName=${wish.getWishName()})}" th:text="${wish.getWishName()}">Wish</a>
+
+</div><br>
+
+<a th:href="@{/add-wish}">Добавить желание</a>
+<a th:href="@{/friends}">Мои друзья</a>
+
+
+</body>
+</html>

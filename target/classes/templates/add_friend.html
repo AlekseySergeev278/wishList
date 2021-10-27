@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить друга</title>
+</head>
+<body>
+
+<h1>Добавить друга</h1>
+
+<form th:method="POST" th:action="@{/add-friend}" th:object="${newFriend}">
+    <label for="friendName">Введите имя друга</label>
+    <input type="text" th:field="*{friendName}" id="friendName"><br>
+
+    <button type="submit" class="bnt bnt-success">Создать</button>
+</form>
+
+</body>
+</html>
