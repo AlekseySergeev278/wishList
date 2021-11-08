@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.wishList.Services.FriendService;
+import ru.wishList.Services.WishService;
 import ru.wishList.models.Friends;
 import ru.wishList.models.Users;
 import ru.wishList.models.Wishes;
@@ -17,25 +19,23 @@ import javax.servlet.http.HttpSession;
 public class FriendsController {
 
     @Autowired
-    FriendRepository friendRepository;
+    FriendService friendService;
 
     @Autowired
-    UserRepository userRepository;
+    WishService wishService;
 
-    @Autowired
-    WishRepository wishRepository;
-
+    //This method catches the path to "friends" and shows the user's friends
     @GetMapping("friends")
     public String showFriends(HttpSession session, Model model) {
 
         Users user = (Users) session.getAttribute("user");
 
-        Iterable<Friends> friends = friendRepository.findAllByUserId(user.getId());
-        model.addAttribute("friends", friends);
+        model.addAttribute("friends", friendService.findFriends(user));
 
         return "friends";
     }
 
+    //This method catches the path "add-friend" and gives a template with form for adding a new friend
     @GetMapping("add-friend")
     public String newFriend(Model model) {
 
@@ -44,18 +44,14 @@ public class FriendsController {
         return "add_friend";
     }
 
+    //This method gets data from form in order to add a new friend and save new Friends object in the database
     @PostMapping("add-friend")
     public String addFriend(@ModelAttribute("newFriend") Friends newFriend, HttpSession session) {
 
-        Users userFriend = userRepository.findByName(newFriend.getFriendName());
-
-        if (userFriend != null) {
+        if (friendService.userExist(newFriend)) {
 
             Users user = (Users) session.getAttribute("user");
-
-            newFriend.setUserId(user.getId());
-            newFriend.setFriendId(userFriend.getId());
-            friendRepository.save(newFriend);
+            friendService.addFriend(user, newFriend);
 
             return "redirect:/friends";
         }
@@ -63,11 +59,12 @@ public class FriendsController {
         return "wrong_user";
     }
 
+    //This method shows friend's wishes
     @GetMapping("{id}")
     public String showFriendsWishes(@PathVariable("id") Long id, Model model) {
-        Friends friend = friendRepository.findById(id).get();
+        Friends friend = friendService.getFriend(id);
         Long userId = friend.getFriendId();
-        Iterable<Wishes> wishes = wishRepository.findAllByUserId(userId);
+        Iterable<Wishes> wishes = wishService.getWishes(userId);
 
         model.addAttribute("wishes", wishes);
         model.addAttribute("friend", friend);
@@ -75,9 +72,10 @@ public class FriendsController {
         return "friend's_wishes";
     }
 
+    //This method delete friend
     @DeleteMapping("/delete-friend")
     public String deleteFriend(@ModelAttribute("friend") Friends friend) {
-        friendRepository.delete(friend);
+        friendService.deleteFriend(friend);
 
         return "redirect:/friends";
     }
