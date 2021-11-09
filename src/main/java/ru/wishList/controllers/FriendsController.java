@@ -9,9 +9,6 @@ import ru.wishList.Services.WishService;
 import ru.wishList.models.Friends;
 import ru.wishList.models.Users;
 import ru.wishList.models.Wishes;
-import ru.wishList.repository.FriendRepository;
-import ru.wishList.repository.UserRepository;
-import ru.wishList.repository.WishRepository;
 
 import javax.servlet.http.HttpSession;
 

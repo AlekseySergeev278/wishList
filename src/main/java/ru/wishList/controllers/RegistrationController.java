@@ -6,15 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.wishList.Services.UserService;
 import ru.wishList.models.Users;
-import ru.wishList.repository.UserRepository;
 
 @Controller
 public class RegistrationController {
 
     @Autowired
-    private UserRepository userRepository;
-
+    UserService userService;
 
     @GetMapping("/registration")
     public String getForm(Model model) {
@@ -24,7 +23,7 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String createUser(@ModelAttribute("newUser") Users newUser){
-        userRepository.save(newUser);
+        userService.addUser(newUser);
         return "redirect:/";
     }
 }

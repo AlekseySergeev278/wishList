@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.wishList.Services.WishService;
 import ru.wishList.models.Users;
-import ru.wishList.repository.WishRepository;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,9 +14,9 @@ import javax.servlet.http.HttpSession;
 public class UsersController {
 
     @Autowired
-    WishRepository wishRepository;
+    WishService wishService;
 
-
+    // Catch path "user" and shows its page
     @GetMapping("/user")
     public String getUser(HttpSession session, Model model) {
 
@@ -24,7 +24,7 @@ public class UsersController {
         Long userId = user.getId();
 
         model.addAttribute("user", user);
-        model.addAttribute("wishes", wishRepository.findAllByUserId(userId));
+        model.addAttribute("wishes", wishService.getWishes(userId));
 
         return "user_page";
     }

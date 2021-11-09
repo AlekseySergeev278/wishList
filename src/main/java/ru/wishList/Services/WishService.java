@@ -11,7 +11,10 @@ public class WishService {
     @Autowired
     WishRepository wishRepository;
 
-    //This method gets user's ID and returns its wishes
+    /**This method gets user's ID and returns its wishes
+     * @param id - User's id in Long type
+     * @return return user's wishes
+     */
     public Iterable<Wishes> getWishes(Long id) {
         System.out.println(wishRepository.findAllByUserId(id));
         return wishRepository.findAllByUserId(id);
