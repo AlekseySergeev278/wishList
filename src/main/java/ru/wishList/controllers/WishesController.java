@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.wishList.Services.WishService;
 import ru.wishList.models.Users;
 import ru.wishList.models.Wishes;
-import ru.wishList.repository.WishRepository;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 public class WishesController {
 
     @Autowired
-    WishRepository wishRepository;
+    WishService wishService;
 
     @ModelAttribute("user")
     public static Users currentUser(HttpSession session){
@@ -27,7 +27,7 @@ public class WishesController {
         Users user = (Users) session.getAttribute("user");
         Long userId = user.getId();
 
-        Iterable<Wishes> wishes = wishRepository.findAllByUserId(userId);
+        Iterable<Wishes> wishes = wishService.getWishes(userId);
 
         return wishes;
     }
@@ -41,32 +41,30 @@ public class WishesController {
     }
 
     @PostMapping("/add-wish")
-    public String addWish(@ModelAttribute("wish") Wishes wish, HttpSession session) {
+    public String addWish(@ModelAttribute("wish") Wishes newWish, HttpSession session) {
         Users user = (Users) session.getAttribute("user");
-
-        wish.setUserId(user.getId());
-        wishRepository.save(wish);
+        wishService.addWish(newWish, user);
 
         return "redirect:/user";
     }
 
     @GetMapping("{userId}/{wishName}")
     public String showWish(@PathVariable("userId") Long userId, @PathVariable("wishName") String wishName, Model model) {
-        model.addAttribute("wish", wishRepository.findByUserIdAndWishName(userId, wishName));
+        model.addAttribute("wish", wishService.getSpecialWish(userId, wishName));
 
         return "wish";
     }
 
     @PatchMapping("/update")
-    public String updateWish(@ModelAttribute("wish") Wishes wish, HttpSession session, Model model) {
-        wishRepository.save(wish);
+    public String updateWish(@ModelAttribute("wish") Wishes wish) {
+        wishService.updateWish(wish);
 
         return "redirect:/user";
     }
 
     @DeleteMapping("/delete")
-    public String deleteWish(@ModelAttribute("wish") Wishes wish, HttpSession session, Model model) {
-        wishRepository.deleteById(wish.getId());
+    public String deleteWish(@ModelAttribute("wish") Wishes wish) {
+        wishService.deleteWish(wish);
 
         return "redirect:/user";
     }
