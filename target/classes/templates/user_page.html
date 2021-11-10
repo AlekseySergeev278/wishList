@@ -10,7 +10,7 @@
 <p th:text="Welcome + ' ' + ${user.name}"/>
 
 <div th:each="wish: ${wishes}">
-    <a th:href="@{/{id}/{wishName}(id=${user.getId()}, wishName=${wish.getWishName()})}" th:text="${wish.getWishName()}">Wish</a>
+    <a th:href="@{/wish/{id}(id=${wish.getId()})}" th:text="${wish.getWishName()}">Wish</a>
 
 </div><br>
 

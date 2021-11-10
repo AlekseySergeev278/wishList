@@ -9,7 +9,7 @@
 <h1>My friend's list!</h1>
 
 <div th:each="friend: ${friends}">
-    <a th:href="@{/{id}(id=${friend.getId()})}" th:text="${friend.getFriendName()}">friend</a>
+    <a th:href="@{/{friendId}(friendId=${friend.getId()})}" th:text="${friend.getFriendName()}">friend</a>
 </div><br>
 
 <a th:href="@{add-friend}">Добаить друга</a>

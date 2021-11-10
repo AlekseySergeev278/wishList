@@ -16,6 +16,8 @@
 
 <form th:action="@{/delete-friend}" th:method="DELETE" th:object="${friend}">
     <input type="hidden" th:field="*{id}">
+    <input type="hidden" th:field="*{userId}">
+    <input type="hidden" th:field="*{friendId}">
     <button type="submit">Удалить</button>
 
 
