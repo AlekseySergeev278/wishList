@@ -28,6 +28,8 @@ public class LoginController {
 
         if (user.getPassword().equals(password)) {
             session.setAttribute("user", user);
+            session.setAttribute("userId", user.getId());
+
             return "redirect:/user";
         }
 

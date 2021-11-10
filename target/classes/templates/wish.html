@@ -7,7 +7,7 @@
 <body>
 <p  th:text="${wish.getWishName()}"/>
 
-<form th:action="@{/update}" th:method="PATCH" th:object="${wish}">
+<form th:action="@{/update/{userId}/{wishId}(userId=${wish.getUserId()}, wishId=${wish.getId()})}" th:method="PATCH" th:object="${wish}">
     <input type="hidden" th:field="*{id}">
     <input type="hidden" th:field="*{userId}">
     <label for="wishName">Введите название желания</label>
@@ -19,8 +19,8 @@
     <button type="submit">Обновить</button>
 </form><br>
 
-<form th:action="@{/delete}" th:method="DELETE" th:object="${wish}">
-    <input type="hidden" th:field="*{id}">
+<form th:action="@{/delete/{id}(id=${wish.getId()})}" th:method="DELETE" th:object="${wish}">
+
     <button type="submit">Удалить</button>
 </form>
 

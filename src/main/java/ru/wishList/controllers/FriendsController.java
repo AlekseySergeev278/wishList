@@ -25,9 +25,9 @@ public class FriendsController {
     @GetMapping("friends")
     public String showFriends(HttpSession session, Model model) {
 
-        Users user = (Users) session.getAttribute("user");
+        Long userId = (Long) session.getAttribute("userId");
 
-        model.addAttribute("friends", friendService.findFriends(user));
+        model.addAttribute("friends", friendService.findFriends(userId));
 
         return "friends";
     }
@@ -47,8 +47,8 @@ public class FriendsController {
 
         if (friendService.userExist(newFriend)) {
 
-            Users user = (Users) session.getAttribute("user");
-            friendService.addFriend(user, newFriend);
+            Long userId = (Long) session.getAttribute("userId");
+            friendService.addFriend(userId, newFriend);
 
             return "redirect:/friends";
         }
@@ -57,9 +57,9 @@ public class FriendsController {
     }
 
     //This method shows friend's wishes
-    @GetMapping("{id}")
-    public String showFriendsWishes(@PathVariable("id") Long id, Model model) {
-        Friends friend = friendService.getFriend(id);
+    @GetMapping("{friendId}")
+    public String showFriendsWishes(@PathVariable("friendId") Long friendId, Model model) {
+        Friends friend = friendService.getFriend(friendId);
         Long userId = friend.getFriendId();
         Iterable<Wishes> wishes = wishService.getWishes(userId);
 
@@ -72,7 +72,10 @@ public class FriendsController {
     //This method delete friend
     @DeleteMapping("/delete-friend")
     public String deleteFriend(@ModelAttribute("friend") Friends friend) {
-        friendService.deleteFriend(friend);
+        Long friendId = friend.getFriendId();
+        Long userId = friend.getUserId();
+
+        friendService.deleteFriend(friend, friendId, userId);
 
         return "redirect:/friends";
     }
